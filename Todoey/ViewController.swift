@@ -10,18 +10,39 @@ import UIKit
 
 class ViewController: UIViewController{
     
-    @IBOutlet weak var todoListTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
-    let itemArray = ["Find Mike", "Buy Eggos", "Destory Demo"]
+    var itemArray = ["Find Mike", "Buy Eggos", "Destory Demo"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        todoListTableView.dataSource = self
-        todoListTableView.delegate = self
+        tableView.dataSource = self
+        tableView.delegate = self
         
     }
-
+    
+    
+    @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            if let text = textField.text{
+                self.itemArray.append(text)
+                self.tableView.reloadData()
+            }
+        }
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
