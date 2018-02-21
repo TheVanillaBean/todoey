@@ -14,7 +14,7 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="TodoListVC" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -47,12 +47,12 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="mr6-Un-aHR">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
-                                <action selector="addBtnPressed:" destination="BYZ-38-t0r" id="rEM-9z-2q0"/>
+                                <action selector="addBtnPressed:" destination="BYZ-38-t0r" id="7Sy-RV-7ry"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="tableView" destination="KuV-BR-aHr" id="BQ0-4d-hWt"/>
+                        <outlet property="tableView" destination="KuV-BR-aHr" id="80M-Hc-GVJ"/>
                     </connections>
                 </viewController>
             </objects>
