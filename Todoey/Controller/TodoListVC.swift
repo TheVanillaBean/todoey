@@ -15,6 +15,8 @@ class TodoListVC: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var itemArray = [Item]()
+    weak var selectedCategory: Category?
+    
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -25,6 +27,9 @@ class TodoListVC: UIViewController {
         tableView.delegate = self
         searchBar.delegate = self
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         loadItems()
     }
     
@@ -37,13 +42,23 @@ class TodoListVC: UIViewController {
         tableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()){
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil){
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+
+        if let additionPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionPredicate])
+        }else {
+            request.predicate = categoryPredicate
+        }
+        
         do {
             itemArray = try context.fetch(request)
         } catch {
             print("Error saving context \(context)")
         }
+        
         tableView.reloadData()
+
     }
     
     @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
@@ -57,6 +72,7 @@ class TodoListVC: UIViewController {
                 let item = Item(context: self.context)
                 item.title = text
                 item.done = false
+                item.parentCategory = self.selectedCategory
                 self.itemArray.append(item)
                 self.saveItems()
                 self.tableView.reloadData()
@@ -117,10 +133,11 @@ extension TodoListVC: UISearchBarDelegate {
     
     func loadRequest(text: String){
         let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS %@", text)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", text)
+        request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
     }
     
     func dismissKeyboard(searchBar: UISearchBar){
