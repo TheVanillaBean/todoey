@@ -15,7 +15,7 @@ class CategoryVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    let realm = try! Realm()
+    lazy var realm = try! Realm()
     
     var categories: Results<Category>?
     
@@ -56,6 +56,7 @@ class CategoryVC: UIViewController {
             if let text = textField.text, text.count > 1{
                 let category = Category()
                 category.name = text
+                category.color = UIColor.randomFlat.hexValue()
                 self.save(category: category)
                 self.tableView.reloadData()
             }
@@ -123,7 +124,9 @@ extension CategoryVC: UITableViewDelegate, UITableViewDataSource, SwipeTableView
             let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
             cell.delegate = self
             cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
-            cell.backgroundColor = UIColor.randomFlat
+            cell.backgroundColor = UIColor(hexString: category?.color != "" ? (category?.color)! : "1D9BF6")
+            guard let color = UIColor(hexString: (category?.color)!) else {return cell}
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
             return cell
     }
     
